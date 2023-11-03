@@ -14,9 +14,9 @@ import com.cg.iba.exception.InvalidDetailsException;
 @Repository
 public interface INomineeRepository extends JpaRepository<Nominee, Integer>{
 
-	public Nominee addNominee(Nominee nominee) throws InvalidDetailsException;
-	public Nominee updateNominee(Nominee nominee) throws InvalidDetailsException;
-	public boolean deleteNominee(long nomineeId) throws DetailsNotFoundException ;
-	public Nominee findNomineeById(long nomineeId)throws DetailsNotFoundException ;
-	public Set<Nominee> listAllNominees(long accountid) throws InvalidAccountException, EmptyListException ;
+//	public Nominee addNominee(Nominee nominee) throws InvalidDetailsException;
+//	public Nominee updateNominee(Nominee nominee) throws InvalidDetailsException;
+//	public boolean deleteNominee(long nomineeId) throws DetailsNotFoundException ;
+//	public Nominee findNomineeById(long nomineeId)throws DetailsNotFoundException ;
+//	public Set<Nominee> listAllNominees(long accountid) throws InvalidAccountException, EmptyListException ;
 }

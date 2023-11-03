@@ -14,9 +14,9 @@ import com.cg.iba.exception.InvalidDetailsException;
 @Repository
 public interface IBeneficiaryRepository extends JpaRepository<Beneficiary, Long> {
 
-	public Beneficiary addBeneficiary(Beneficiary beneficiary)throws InvalidDetailsException;
-	public Beneficiary updateBeneficiary(Beneficiary beneficiary) throws InvalidDetailsException;
-	public boolean deleteBeneficiary(long beneficiaryId) throws DetailsNotFoundException;
-	public Beneficiary findBeneficiaryById(long beneficiaryId) throws DetailsNotFoundException;
-	public Set<Beneficiary> listAllBeneficiaries(long accountid) throws InvalidAccountException,EmptyListException;
+//	public Beneficiary addBeneficiary(Beneficiary beneficiary)throws InvalidDetailsException;
+//	public Beneficiary updateBeneficiary(Beneficiary beneficiary) throws InvalidDetailsException;
+//	public boolean deleteBeneficiary(long beneficiaryId) throws DetailsNotFoundException;
+//	public Beneficiary findBeneficiaryById(long beneficiaryId) throws DetailsNotFoundException;
+//	public Set<Beneficiary> listAllBeneficiaries(long accountid) throws InvalidAccountException,EmptyListException;
 }

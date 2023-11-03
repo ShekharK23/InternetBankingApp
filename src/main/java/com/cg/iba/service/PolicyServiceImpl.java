@@ -14,8 +14,6 @@ import com.cg.iba.entity.Account;
 import com.cg.iba.entity.Policy;
 import com.cg.iba.repository.IAccountRepository;
 import com.cg.iba.repository.IPolicyRepository;
-import com.cg.iba.util.PolicyDateConverter;
-
 
 @Service
 public class PolicyServiceImpl implements IPolicyService {
@@ -62,11 +60,11 @@ public class PolicyServiceImpl implements IPolicyService {
 		Policy savedPolicy = getPolicyByPolicyNumber(policyNumber);
 		if(savedPolicy!=null) {
 			LocalDate currentDate = LocalDate.now();
-			LocalDate expiryDate = PolicyDateConverter.getDateFromString(savedPolicy.getPolicyExpiryDate());
+			//LocalDate expiryDate = PolicyDateConverter.getDateFromString(savedPolicy.getPolicyExpiryDate());
 			
-			if(currentDate.isAfter(expiryDate)) {
-				return "Policy is Expired";
-			}		
+//			if(currentDate.isAfter(expiryDate)) {
+//				return "Policy is Expired";
+//			}		
 		}
 		return "Policy is yet to Expired";
 	}
@@ -80,7 +78,5 @@ public class PolicyServiceImpl implements IPolicyService {
             policyRepository.deleteByAccount(acc);
         }
 	}
-
-	
 
 }

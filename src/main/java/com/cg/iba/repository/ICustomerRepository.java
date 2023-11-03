@@ -14,12 +14,12 @@ import com.cg.iba.exception.InvalidDetailsException;
 @Repository
 public interface ICustomerRepository extends JpaRepository<Customer, Long> {
 
-	public Customer  addCustomer(Customer customer) throws InvalidDetailsException;
-	public Customer updateCustomer(Customer customer)throws InvalidDetailsException ;
-	public boolean deleteCustomer(long customer_id) throws DetailsNotFoundException;
-	
-	public Set<Customer> listAllCustomers(double minBalance) throws EmptyListException;
-	public Customer viewCustomerDetails(long account_id) throws InvalidAccountException,DetailsNotFoundException ;
-	
-	public  Customer findCustomerById(long customer_id) throws DetailsNotFoundException;
+//	public Customer  addCustomer(Customer customer) throws InvalidDetailsException;
+//	public Customer updateCustomer(Customer customer)throws InvalidDetailsException ;
+//	public boolean deleteCustomer(long customer_id) throws DetailsNotFoundException;
+//	
+//	public Set<Customer> listAllCustomers(double minBalance) throws EmptyListException;
+//	public Customer viewCustomerDetails(long account_id) throws InvalidAccountException,DetailsNotFoundException ;
+//	
+//	public  Customer findCustomerById(long customer_id) throws DetailsNotFoundException;
 }

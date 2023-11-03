@@ -1,9 +1,12 @@
 package com.cg.iba.service;
 
+import org.springframework.stereotype.Service;
+
 import com.cg.iba.entity.User;
 import com.cg.iba.exception.DetailsNotFoundException;
 import com.cg.iba.exception.InvalidDetailsException;
 
+@Service
 public interface IUserService {
 
 	public  User addNewUser(User user) throws InvalidDetailsException;

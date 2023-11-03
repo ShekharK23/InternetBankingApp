@@ -1,12 +1,20 @@
 package com.cg.iba.entity;
 
 import java.time.LocalDate;
-import java.util.Set;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import io.swagger.annotations.ApiModel;
@@ -20,6 +28,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @ApiModel(description = "Details about Account Bean")
 public class Account {
 	
@@ -30,8 +39,37 @@ public class Account {
     private double interestRate;
     private double balance;
     private LocalDate  dateOfOpening;
-    private Set<Customer> customers;
-    private Set<Nominee> nominees;
-    private Set<Beneficiary> beneficiaries;
+    
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "customerId1")
+    private Customer customer;
+    
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "nomineeID1")
+    private List<Nominee> nominees;
+    
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "beneficiaryID1")
+    private List<Beneficiary> beneficiaries;
+    
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "transactionID1")
+    private List<Transaction> transactions;
+    
+    @OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "debitCardNumber1")
+	private DebitCard debitCard;
+    
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "branchIFSC1")
+	private Branch branch;
+	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "policyNumber1")
+	private List<Policy> allPolicy;
+	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "fdNumber1")
+	private List<Investment> allInvestment;
     
  }
