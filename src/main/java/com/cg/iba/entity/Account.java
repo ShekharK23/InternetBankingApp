@@ -38,6 +38,7 @@ public class Account {
     private long accountId; 
     private double interestRate;
     private double balance;
+    
     private LocalDate  dateOfOpening;
     
     @ManyToOne(cascade = CascadeType.ALL)

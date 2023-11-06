@@ -4,8 +4,6 @@ import java.time.LocalDate;
 
 import org.springframework.stereotype.Component;
 
-import com.cg.iba.entity.Gender;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,15 +12,13 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AccountAddDTO {
-
+public class SavingAccountRequestSubmitDTO {
+	
     private double interestRate;
     private double balance;
     private LocalDate  dateOfOpening;
-    private String customerName;
-    private String phoneNo;
-    private String emailId;
-    private int age;
-    private Gender gender; 
+    
+    private double savingMinBalance;
+    private double savingFine; 
     
 }

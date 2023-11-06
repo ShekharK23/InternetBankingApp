@@ -4,6 +4,8 @@ import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
+import com.cg.iba.dto.CurrentAccountRequestSubmitDTO;
+import com.cg.iba.dto.SavingAccountRequestSubmitDTO;
 import com.cg.iba.entity.Account;
 import com.cg.iba.entity.SavingsAccount;
 import com.cg.iba.entity.CurrentAccount;
@@ -23,19 +25,19 @@ public interface IAccountService {
 	public Transaction deposit(long accounId, double amount) throws InvalidAccountException,InvalidAmountException;
 	
 	public SavingsAccount addSavingsAccount(SavingsAccount saving) throws InvalidDetailsException;
-	public  CurrentAccount addTermAccount(CurrentAccount term) throws InvalidDetailsException;
+	public  CurrentAccount addCurrentAccount(CurrentAccount term) throws InvalidDetailsException;
 	
-	public SavingsAccount updateSavingsAccount(SavingsAccount saving) throws InvalidDetailsException;
-	public  CurrentAccount updateTermAccount(CurrentAccount term) throws InvalidDetailsException;
+	public SavingsAccount updateSavingsAccount(long accountId, SavingAccountRequestSubmitDTO savingRequestDTO) throws InvalidDetailsException;
+	public  CurrentAccount updateCurrentAccount(long account_id, CurrentAccountRequestSubmitDTO currentRequestDTO) throws InvalidDetailsException;
 	
 	public  boolean closeSavingsAccount(SavingsAccount accountNo) throws InvalidAccountException;
-	public  boolean closeTermAccount(CurrentAccount accountNo) throws InvalidAccountException;
+	public  boolean closeCurrentAccount(CurrentAccount accountNo) throws InvalidAccountException;
 	
 	public  Account findAccountById(int account_id) throws InvalidAccountException;
 	
 	public Set<Account> viewAccounts(long customerId) throws DetailsNotFoundException;
 	
 	public SavingsAccount viewSavingAcc(long customerId) throws DetailsNotFoundException ;
-	public CurrentAccount viewTermAcc(long customerId) throws DetailsNotFoundException;
+	public CurrentAccount viewCurrentAcc(long customerId) throws DetailsNotFoundException;
 
 }
