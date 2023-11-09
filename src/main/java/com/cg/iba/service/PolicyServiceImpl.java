@@ -75,7 +75,7 @@ public class PolicyServiceImpl implements IPolicyService {
 		Optional<Account> account = accountRepository.findById(accountNumber);
         if (account.isPresent()) {
             Account acc = account.get();
-            policyRepository.deleteByAccount(acc);
+          //  policyRepository.deleteByAccount(acc);
         }
 	}
 

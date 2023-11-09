@@ -73,9 +73,9 @@ public class DebitCardServiceImpl implements IDebitCardService {
 	        DebitCard savedDebitCard = getDebitCardByDebitCardNumber(debitCardNumber);
 	        if (savedDebitCard != null) {
 	            LocalDate currentDate = LocalDate.now();
-	            String expiryDateString = savedDebitCard.getDebitCardExpiryDate();
+	            LocalDate expiryDate = savedDebitCard.getDebitCardExpiryDate();
 	            
-	            LocalDate expiryDate = DateConverter.getDateFromString(expiryDateString);
+	          //  LocalDate expiryDate = DateConverter.getDateFromString(expiryDateString);
 	            
 	            if (expiryDate != null && currentDate.isAfter(expiryDate) ) {
 	                return "Debit Card is Expired";

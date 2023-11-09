@@ -26,8 +26,10 @@ public class Policy {
 	private int policySumAssured;
 	private String policyExpiryDate;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "accountNumber")
-	private Account account;
+	/*
+	 * @ManyToOne(cascade = CascadeType.ALL)
+	 * 
+	 * @JoinColumn(name = "accountNumber") private Account account;
+	 */
 	
 }

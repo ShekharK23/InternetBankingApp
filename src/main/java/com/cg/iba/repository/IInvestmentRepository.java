@@ -11,5 +11,5 @@ import com.cg.iba.entity.Investment;
 @Repository
 public interface IInvestmentRepository extends JpaRepository<Investment, Long> {
 
-	public void deleteByAccount(Account account);
+	//public void deleteByAccount(Account account);
 }

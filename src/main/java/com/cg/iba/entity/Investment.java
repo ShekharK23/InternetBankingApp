@@ -27,7 +27,9 @@ public class Investment {
 	private String fdStartDate;
 	private String fdMaturityDate;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "accountNumber")
-	private Account account;
+	/*
+	 * @ManyToOne(cascade = CascadeType.ALL)
+	 * 
+	 * @JoinColumn(name = "accountNumber") private Account account;
+	 */
 }

@@ -1,5 +1,6 @@
 package com.cg.iba.repository;
 
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,11 +13,11 @@ import com.cg.iba.exception.InvalidAccountException;
 import com.cg.iba.exception.InvalidDetailsException;
 
 @Repository
-public interface INomineeRepository extends JpaRepository<Nominee, Integer>{
+public interface INomineeRepository extends JpaRepository<Nominee, Long>{
 
 //	public Nominee addNominee(Nominee nominee) throws InvalidDetailsException;
 //	public Nominee updateNominee(Nominee nominee) throws InvalidDetailsException;
 //	public boolean deleteNominee(long nomineeId) throws DetailsNotFoundException ;
 //	public Nominee findNomineeById(long nomineeId)throws DetailsNotFoundException ;
-//	public Set<Nominee> listAllNominees(long accountid) throws InvalidAccountException, EmptyListException ;
+//	public List<Nominee> listAllNominees(long accountid) throws InvalidAccountException, EmptyListException ;
 }

@@ -33,7 +33,7 @@ public class Nominee {
 	@Column(name="relation")
     private Relation relation; 
     
-    @ManyToOne(cascade = CascadeType.ALL)
+   /* @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "accountId1")
-    private Account account;
+    private Account account;*/
  }

@@ -1,9 +1,11 @@
 package com.cg.iba.service;
 
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
+import com.cg.iba.dto.AccountDTO;
 import com.cg.iba.dto.CurrentAccountRequestSubmitDTO;
 import com.cg.iba.dto.SavingAccountRequestSubmitDTO;
 import com.cg.iba.entity.Account;
@@ -33,11 +35,13 @@ public interface IAccountService {
 	public  boolean closeSavingsAccount(SavingsAccount accountNo) throws InvalidAccountException;
 	public  boolean closeCurrentAccount(CurrentAccount accountNo) throws InvalidAccountException;
 	
-	public  Account findAccountById(int account_id) throws InvalidAccountException;
+	public  Account findAccountById(long account_id) throws InvalidAccountException;
 	
-	public Set<Account> viewAccounts(long customerId) throws DetailsNotFoundException;
+	public List<Account> viewAccounts(long customerId) throws DetailsNotFoundException;
 	
 	public SavingsAccount viewSavingAcc(long customerId) throws DetailsNotFoundException ;
 	public CurrentAccount viewCurrentAcc(long customerId) throws DetailsNotFoundException;
 
+	public Account addDebitCardToAccount(long accNum, long debitCardNum) throws InvalidAccountException;
+	public Account addNomineeToAccount(long nomineeId, long accNum) throws InvalidAccountException, DetailsNotFoundException,InvalidDetailsException;
 }

@@ -2,6 +2,7 @@ package com.cg.iba.entity;
 
 import java.time.LocalDate;
 
+
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -16,6 +17,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -39,14 +42,15 @@ public class Account {
     private double interestRate;
     private double balance;
     
+    @JsonFormat(pattern = "yyyy/MM/dd")
     private LocalDate  dateOfOpening;
     
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "customerId1")
     private Customer customer;
     
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "nomineeID1")
+    @OneToMany(cascade = CascadeType.ALL)//(mappedBy = "account" ,cascade = CascadeType.ALL)
+    @JoinColumn( name = "dependedId")
     private List<Nominee> nominees;
     
     @OneToMany(cascade = CascadeType.ALL)
@@ -60,7 +64,7 @@ public class Account {
     @OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "debitCardNumber1")
 	private DebitCard debitCard;
-    
+   /* 
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "branchIFSC1")
 	private Branch branch;
@@ -72,5 +76,5 @@ public class Account {
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "fdNumber1")
 	private List<Investment> allInvestment;
-    
+    */
  }

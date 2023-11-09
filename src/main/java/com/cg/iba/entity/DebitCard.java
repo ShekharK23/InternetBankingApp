@@ -1,10 +1,11 @@
 package com.cg.iba.entity;
 
+import java.time.LocalDate;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,8 +20,11 @@ public class DebitCard {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long debitCardNumber;
 	private int debitCardPin;
-	private String debitCardExpiryDate;
+	private LocalDate debitCardExpiryDate;
 	private int debitCardLimit;
 	private String debitCardStatus; //allocated or not allocated
 	
+//  @OneToOne(cascade = CascadeType.ALL)
+//	@JoinColumn(name = "accountNumber1")
+//	private Account account;
 }

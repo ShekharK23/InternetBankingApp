@@ -77,7 +77,7 @@ public class InvestmentServiceImpl implements IInvestmentService {
 		Optional<Account> account = accountRepository.findById(accountNumber);
         if (account.isPresent()) {
             Account acc = account.get();
-            investmentRepository.deleteByAccount(acc);
+            //investmentRepository.deleteByAccount(acc);
         }
 	}
 

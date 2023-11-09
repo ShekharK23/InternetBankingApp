@@ -1,5 +1,7 @@
 package com.cg.iba.service;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.transaction.Transactional;
@@ -7,10 +9,13 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.cg.iba.dto.AccountDTO;
 import com.cg.iba.dto.CurrentAccountRequestSubmitDTO;
 import com.cg.iba.dto.SavingAccountRequestSubmitDTO;
 import com.cg.iba.entity.Account;
 import com.cg.iba.entity.CurrentAccount;
+import com.cg.iba.entity.DebitCard;
+import com.cg.iba.entity.Nominee;
 import com.cg.iba.entity.SavingsAccount;
 import com.cg.iba.entity.Transaction;
 import com.cg.iba.exception.DetailsNotFoundException;
@@ -19,12 +24,23 @@ import com.cg.iba.exception.InvalidAmountException;
 import com.cg.iba.exception.InvalidDetailsException;
 import com.cg.iba.exception.LowBalanceException;
 import com.cg.iba.repository.IAccountRepository;
+import com.cg.iba.repository.IDebitCardRepository;
+import com.cg.iba.repository.INomineeRepository;
 
 @Service
 public class AccountServiceImpl implements IAccountService {
 
 	@Autowired
 	IAccountRepository accountRepository;
+	
+	@Autowired
+	IDebitCardRepository debitCardRepository;
+	
+	@Autowired
+	INomineeRepository nomineeRepository;
+	
+	@Autowired
+	INomineeService nomineeService;
 	
 	@Override
 	public Transaction transferMoney(long senderAccounId, long receiverAccountId, double amount, String username,
@@ -66,14 +82,12 @@ public class AccountServiceImpl implements IAccountService {
         if (existingAccount instanceof SavingsAccount) {
             SavingsAccount savingsAccount = (SavingsAccount) existingAccount;
             
-            // Update the SavingsAccount entity with the values from the DTO
             savingsAccount.setInterestRate(savingRequestDTO.getInterestRate());
             savingsAccount.setBalance(savingRequestDTO.getBalance());
             savingsAccount.setDateOfOpening(savingRequestDTO.getDateOfOpening());
             savingsAccount.setSavingMinBalance(savingRequestDTO.getSavingMinBalance());
             savingsAccount.setSavingFine(savingRequestDTO.getSavingFine());
 
-            // Save the updated SavingsAccount entity
             SavingsAccount updatedAccount = accountRepository.save(savingsAccount);
 
             return updatedAccount;
@@ -90,15 +104,13 @@ public class AccountServiceImpl implements IAccountService {
 
         if (existingAccount instanceof CurrentAccount) {
             CurrentAccount currentAccount = (CurrentAccount) existingAccount;
-            
-            // Update the SavingsAccount entity with the values from the DTO
+    
             currentAccount.setInterestRate(currentRequestDTO.getInterestRate());
             currentAccount.setBalance(currentRequestDTO.getBalance());
             currentAccount.setDateOfOpening(currentRequestDTO.getDateOfOpening());
             currentAccount.setCurrentMinBalance(currentRequestDTO.getCurrentMinBalance());
             currentAccount.setCurrentFine(currentRequestDTO.getCurrentFine());
 
-            // Save the updated SavingsAccount entity
             CurrentAccount updatedAccount = accountRepository.save(currentAccount);
 
             return updatedAccount;
@@ -109,24 +121,54 @@ public class AccountServiceImpl implements IAccountService {
 
 	@Override
 	public boolean closeSavingsAccount(SavingsAccount accountNo) throws InvalidAccountException {
-		// TODO Auto-generated method stub
-		return false;
+		Account existingAccount = accountRepository.findById(accountNo.getAccountId()).get();
+		
+		if(existingAccount == null) {
+			new InvalidAccountException("Account not found","");
+			return false;
+		} else {
+			accountRepository.deleteById(accountNo.getAccountId());
+			return true;
+		}
+
 	}
 
 	@Override
 	public boolean closeCurrentAccount(CurrentAccount accountNo) throws InvalidAccountException {
-		// TODO Auto-generated method stub
-		return false;
+		Account existingAccount = accountRepository.findById(accountNo.getAccountId()).get();
+		
+		if(existingAccount == null) {
+			new InvalidAccountException("Account not found","");
+			return false;
+		} else {
+			accountRepository.deleteById(accountNo.getAccountId());
+			return true;
+		}
+
+	}
+
+//	@Override
+//	public Account findAccountById(int account_id) throws InvalidAccountException {
+//		Account account = accountRepository.findById((long) account_id).get();
+//		if(account == null) {
+//			throw new InvalidAccountException("Account Not Found.","");
+//		}
+//		return account;
+//	}
+	
+	@Override
+	public Account findAccountById(long account_id) throws InvalidAccountException {
+	    Optional<Account> accountOptional = accountRepository.findById(account_id);
+
+	    if (accountOptional.isPresent()) {
+	        return accountOptional.get();
+	    } else {
+	        throw new InvalidAccountException("Account Not Found.","");
+	    }
 	}
 
 	@Override
-	public Account findAccountById(int account_id) throws InvalidAccountException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Set<Account> viewAccounts(long customerId) throws DetailsNotFoundException {
+	public List<Account> viewAccounts(long customerId) throws DetailsNotFoundException {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -143,6 +185,52 @@ public class AccountServiceImpl implements IAccountService {
 		return null;
 	}
 
+	@Override
+	@Transactional
+	public Account addDebitCardToAccount(long accNum, long debitCardNum) throws InvalidAccountException {
+		Account savedAcc = findAccountById(accNum);
+		DebitCard card = debitCardRepository.findById(debitCardNum).get(); 
+		if(savedAcc != null && card != null)
+		{
+			savedAcc.setDebitCard(card);
+			return savedAcc;
+		}
+		return null;
+	}
 	
-
+	@Override
+	@Transactional
+	public Account addNomineeToAccount(long nomineeId, long accNum) throws InvalidAccountException, DetailsNotFoundException, InvalidDetailsException{
+		Account savedAcc = findAccountById(accNum);
+		Nominee nominee = nomineeService.findNomineeById(nomineeId);
+		System.out.println(savedAcc.getAccountId()+" - "+savedAcc.getBalance());
+		System.out.println(nominee.getName());
+		if(savedAcc != null && nominee != null)
+		{
+			System.out.println("inside if ");
+			List<Nominee> allNominees = savedAcc.getNominees();
+			System.out.println("===>> 1 "+allNominees.size());
+			
+			allNominees.add(nominee);
+			
+			savedAcc.setNominees(allNominees);
+			System.out.println(savedAcc);
+			
+			if(savedAcc instanceof SavingsAccount)
+			{
+				SavingsAccount sa = (SavingsAccount)savedAcc;
+				addSavingsAccount(sa);
+				return sa;
+			}
+			if(savedAcc instanceof CurrentAccount)
+			{
+				CurrentAccount ca = (CurrentAccount)savedAcc;
+				addCurrentAccount(ca);
+				return ca;
+			}
+			
+			
+		}
+		return null;
+	}
 }

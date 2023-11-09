@@ -1,5 +1,6 @@
 package com.cg.iba.service;
 
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.stereotype.Service;
@@ -17,5 +18,5 @@ public interface IAdminService {
 	public Admin findAdminById(long adminId)throws DetailsNotFoundException ;
 	public Admin updateAdmin(Admin admin) throws InvalidDetailsException ;
 	public boolean removeAdmin(long adminId)throws DetailsNotFoundException;
-	public Set<Admin> listAllAdmins() throws EmptyListException;
+	public List<Admin> listAllAdmins() throws EmptyListException;
 }

@@ -26,7 +26,7 @@ public class Branch {
 	private String branchCity;
 	private String branchArea;
 	
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "accountNumberBr")
-	private List<Account> allAccounts;
+//	@OneToMany(cascade = CascadeType.ALL)
+//	@JoinColumn(name = "accountNumberBr")
+//	private List<Account> allAccounts;
 }
