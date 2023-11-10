@@ -2,16 +2,17 @@ package com.cg.iba.util;
 
 import org.springframework.stereotype.Component;
 
-import com.cg.iba.dto.SavingAccountRequestSubmitDTO;
-import com.cg.iba.entity.SavingsAccount;
+import com.cg.iba.dto.CurrentAccountResponseDTO;
+import com.cg.iba.entity.CurrentAccount;
 
 @Component
-public class SavingsAccountRequestSubmitDTOConverter {
+public class CurrentAccountResponseDTOMapper {
 
-	public SavingsAccount setSavingAccountUsingDTO(SavingAccountRequestSubmitDTO dto)
+	public CurrentAccount getCurrentAccountUsingDTO(CurrentAccountResponseDTO dto)
 	{
-		SavingsAccount a = new SavingsAccount();
+		CurrentAccount a = new CurrentAccount();
 		
+		a.setAccountId(dto.getAccountId());
 		a.setAccountHolderName(dto.getAccountHolderName());
 		a.setPhoneNo(dto.getPhoneNo());
 		a.setEmailId(dto.getAccountHolderName());
@@ -20,8 +21,8 @@ public class SavingsAccountRequestSubmitDTOConverter {
 		a.setInterestRate(dto.getInterestRate());
 		a.setBalance(dto.getBalance());
 		a.setDateOfOpening(dto.getDateOfOpening());
-		a.setSavingMinBalance(dto.getSavingMinBalance());
-		a.setSavingFine(dto.getSavingFine());
+		a.setCurrentMinBalance(dto.getCurrentMinBalance());
+		a.setCurrentFine(dto.getCurrentFine());
 		
 		return a;
 	}

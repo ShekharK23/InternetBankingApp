@@ -6,9 +6,9 @@ import com.cg.iba.dto.SavingAccountRequestSubmitDTO;
 import com.cg.iba.entity.SavingsAccount;
 
 @Component
-public class SavingsAccountRequestSubmitDTOConverter {
+public class SavingAccountResponseDTOMapper {
 
-	public SavingsAccount setSavingAccountUsingDTO(SavingAccountRequestSubmitDTO dto)
+	public SavingsAccount getAccountUsingDTO(SavingAccountRequestSubmitDTO dto)
 	{
 		SavingsAccount a = new SavingsAccount();
 		

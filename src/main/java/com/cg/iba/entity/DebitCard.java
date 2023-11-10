@@ -22,9 +22,6 @@ public class DebitCard {
 	private int debitCardPin;
 	private LocalDate debitCardExpiryDate;
 	private int debitCardLimit;
-	private String debitCardStatus; //allocated or not allocated
-	
-//  @OneToOne(cascade = CascadeType.ALL)
-//	@JoinColumn(name = "accountNumber1")
-//	private Account account;
+	private String debitCardStatus;
+
 }

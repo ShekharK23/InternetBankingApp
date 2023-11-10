@@ -14,19 +14,18 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SavingAccountRequestSubmitDTO {
-	
+public class CurrentAccountResponseDTO {
+
 	private long accountId;
 	private String accountHolderName;
-    private String phoneNo;
-    private String emailId;
-    private int age;
-    private Gender gender; 
-    private double interestRate;
-    private double balance;
-    private LocalDate dateOfOpening;
-    
-    private double savingMinBalance;
-    private double savingFine; 
-    
+	private String phoneNo;
+	private String emailId;
+	private int age;
+	private Gender gender;
+	private double interestRate;
+	private double balance;
+	private LocalDate dateOfOpening;
+
+	private double currentMinBalance;
+	private double currentFine;
 }

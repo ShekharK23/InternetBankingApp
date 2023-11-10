@@ -12,21 +12,23 @@ import lombok.NoArgsConstructor;
 
 @Component
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class SavingAccountRequestSubmitDTO {
-	
+@AllArgsConstructor
+public class AccountResponseDTO {
+
 	private long accountId;
 	private String accountHolderName;
-    private String phoneNo;
-    private String emailId;
-    private int age;
-    private Gender gender; 
-    private double interestRate;
-    private double balance;
-    private LocalDate dateOfOpening;
-    
+	private String phoneNo;
+	private String emailId;
+	private int age;
+	private Gender gender;
+	private double interestRate;
+	private double balance;
+	private LocalDate dateOfOpening;
+
+	private double currentMinBalance;
+	private double currentFine;
+	
     private double savingMinBalance;
     private double savingFine; 
-    
 }

@@ -31,8 +31,5 @@ public class Beneficiary {
 	@Enumerated(EnumType.STRING)
 	@Column(name="accountType1")
 	private AccountType accountType;
-	
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "accountId1")
-    private Account account;
+
 }

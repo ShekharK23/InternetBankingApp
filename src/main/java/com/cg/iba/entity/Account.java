@@ -2,18 +2,19 @@ package com.cg.iba.entity;
 
 import java.time.LocalDate;
 
-
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -39,17 +40,23 @@ public class Account {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@ApiModelProperty(notes = "Unique Account Number of Account")
     private long accountId; 
+	
+	private String accountHolderName;
+    private String phoneNo;
+    private String emailId;
+    private int age;
+    
+	@Enumerated(EnumType.STRING)
+	@Column(name="gender")
+    private Gender gender; 
+	
     private double interestRate;
     private double balance;
     
     @JsonFormat(pattern = "yyyy/MM/dd")
     private LocalDate  dateOfOpening;
     
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "customerId1")
-    private Customer customer;
-    
-    @OneToMany(cascade = CascadeType.ALL)//(mappedBy = "account" ,cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn( name = "dependedId")
     private List<Nominee> nominees;
     
@@ -64,17 +71,5 @@ public class Account {
     @OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "debitCardNumber1")
 	private DebitCard debitCard;
-   /* 
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "branchIFSC1")
-	private Branch branch;
-	
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "policyNumber1")
-	private List<Policy> allPolicy;
-	
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "fdNumber1")
-	private List<Investment> allInvestment;
-    */
+
  }

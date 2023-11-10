@@ -24,6 +24,5 @@ public class NomineeRequestSubmitDTO {
     private String phoneNo;
     
 	@Enumerated(EnumType.STRING)
-	@Column(name="relation")
     private Relation relation; 
 }

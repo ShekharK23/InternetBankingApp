@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cg.iba.dto.AccountDTO;
 import com.cg.iba.dto.CurrentAccountRequestSubmitDTO;
 import com.cg.iba.dto.NomineeRequestSubmitDTO;
 import com.cg.iba.dto.SavingAccountRequestSubmitDTO;
@@ -31,7 +30,6 @@ import com.cg.iba.exception.InvalidDetailsException;
 import com.cg.iba.service.IAccountService;
 import com.cg.iba.service.IDebitCardService;
 import com.cg.iba.service.INomineeService;
-import com.cg.iba.util.AccountDTOMapper;
 import com.cg.iba.util.CurrentAccountRequestSubmitDTOConverter;
 import com.cg.iba.util.NomineeRequestSubmitDTOMapper;
 import com.cg.iba.util.SavingsAccountRequestSubmitDTOConverter;
@@ -58,18 +56,15 @@ public class AdminRestController {
 	@Autowired
 	NomineeRequestSubmitDTOMapper nomineeReqSubDTO;
 	
-	@Autowired
-	AccountDTOMapper accountDTO;
-	
-	@PostMapping("/register/newsavingsdto") // working
+	@PostMapping("/register/newsavingsdto") // to be checked
 	public SavingsAccount saveSavingsAccountDto(@RequestBody SavingAccountRequestSubmitDTO dto) throws InvalidDetailsException
 	{
-		SavingsAccount a = savAccReqSubDTO.setAccountUsingDTO(dto);
+		SavingsAccount a = savAccReqSubDTO.setSavingAccountUsingDTO(dto);
 		SavingsAccount sav =  accountService.addSavingsAccount(a);
 		return sav;
 	}
 	
-	@PostMapping("/register/newcurrentdto") // working
+	@PostMapping("/register/newcurrentdto") // to be checked
 	public CurrentAccount saveCurrentAcoountDto(@RequestBody CurrentAccountRequestSubmitDTO dto) throws InvalidDetailsException
 	{
 		CurrentAccount a = curAccReqSubDTO.setCurrentAccountUsingDTO(dto);
@@ -77,7 +72,7 @@ public class AdminRestController {
 		return cur;
 	}
 	
-    @PutMapping("/savings/{accountId}") // working
+    @PutMapping("/savings/{accountId}") // to be checked
     public ResponseEntity<SavingsAccount> updateSavingsAccount(
             @PathVariable long accountId,
             @RequestBody SavingAccountRequestSubmitDTO savingRequestDTO
@@ -90,7 +85,7 @@ public class AdminRestController {
         }
     }
     
-    @PutMapping("/current/{accountId}") // working
+    @PutMapping("/current/{accountId}") // to be checked
     public ResponseEntity<CurrentAccount> updateCurrentAccount(
             @PathVariable long accountId,
             @RequestBody CurrentAccountRequestSubmitDTO currentRequestDTO
@@ -129,7 +124,7 @@ public class AdminRestController {
     	return "Current Account Not Closed.";
     }
     
-	@GetMapping("/getaccount") // working
+	@GetMapping("/getaccount") // to be checked
 	public ResponseEntity<Account> getAccountById1(@RequestParam long accountId)
 	{
 		try {
@@ -142,24 +137,38 @@ public class AdminRestController {
 
 	}
 	
-//	@GetMapping("/getaccountbyid") // working
-//	public ResponseEntity<AccountDTO> getAccountById(@RequestParam long accountId)
-//	{
-//		try {
-//			
-//			Account account = accountService.findAccountById(accountId);
-//			if (AccountDTO instanceof Account) {
-//				Account a = (AccountDTO) accdto;
-//			}
-//			Account a = accountDTO.getAccountUsingDTO(account);
-//
-//			return new ResponseEntity<AccountDTO>(account,HttpStatus.OK);
-//		} catch (InvalidAccountException e) {
-//			System.out.println(e);
-//			return new ResponseEntity<AccountDTO>(HttpStatus.NOT_FOUND);
-//		}
-//
-//	}
+	@GetMapping("/getallaccounts") // to be check
+	public ResponseEntity<List<Account>> getAllAccounts()
+	{
+		List<Account> accounts = accountService.viewAccounts();
+		return new ResponseEntity<List<Account>>(accounts, HttpStatus.OK);
+	}
+	
+	@GetMapping("/getsavingaccount") // to be check
+	public ResponseEntity<SavingsAccount> getSavingAccountById(@RequestParam long accountId) throws DetailsNotFoundException
+	{
+		try {
+			SavingsAccount account = accountService.viewSavingAcc(accountId);
+			return new ResponseEntity<SavingsAccount>(account,HttpStatus.OK);
+		} catch (DetailsNotFoundException e) {
+			System.out.println(e);
+			return new ResponseEntity<SavingsAccount>(HttpStatus.NOT_FOUND);
+		}
+
+	}
+	
+	@GetMapping("/getcurrentaccount") // to be check
+	public ResponseEntity<CurrentAccount> getCurrentAccountById(@RequestParam long accountId) throws DetailsNotFoundException
+	{
+		try {
+			CurrentAccount account = accountService.viewCurrentAcc(accountId);
+			return new ResponseEntity<CurrentAccount>(account,HttpStatus.OK);
+		} catch (DetailsNotFoundException e) {
+			System.out.println(e);
+			return new ResponseEntity<CurrentAccount>(HttpStatus.NOT_FOUND);
+		}
+
+	}
 	
 	@PutMapping("/debitcardtoacc")
 	public Account allocateDebitCardToAccount(@RequestParam long accNum,@RequestParam long debitCardNum) throws InvalidAccountException {

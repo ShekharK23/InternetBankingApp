@@ -1,15 +1,14 @@
 package com.cg.iba.service;
 
 import java.util.List;
+
 import java.util.Optional;
-import java.util.Set;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.cg.iba.dto.AccountDTO;
 import com.cg.iba.dto.CurrentAccountRequestSubmitDTO;
 import com.cg.iba.dto.SavingAccountRequestSubmitDTO;
 import com.cg.iba.entity.Account;
@@ -82,6 +81,11 @@ public class AccountServiceImpl implements IAccountService {
         if (existingAccount instanceof SavingsAccount) {
             SavingsAccount savingsAccount = (SavingsAccount) existingAccount;
             
+            savingsAccount.setAccountHolderName(savingRequestDTO.getAccountHolderName());
+            savingsAccount.setPhoneNo(savingRequestDTO.getPhoneNo());
+            savingsAccount.setEmailId(savingRequestDTO.getEmailId());
+            savingsAccount.setAge(savingRequestDTO.getAge());
+            savingsAccount.setGender(savingRequestDTO.getGender());
             savingsAccount.setInterestRate(savingRequestDTO.getInterestRate());
             savingsAccount.setBalance(savingRequestDTO.getBalance());
             savingsAccount.setDateOfOpening(savingRequestDTO.getDateOfOpening());
@@ -95,7 +99,7 @@ public class AccountServiceImpl implements IAccountService {
             throw new InvalidDetailsException("Account is not a Savings Account","");
         }
     }
-	
+    
 	@Override
 	@Transactional
 	public CurrentAccount updateCurrentAccount(long accountId,CurrentAccountRequestSubmitDTO currentRequestDTO) throws InvalidDetailsException {
@@ -105,6 +109,11 @@ public class AccountServiceImpl implements IAccountService {
         if (existingAccount instanceof CurrentAccount) {
             CurrentAccount currentAccount = (CurrentAccount) existingAccount;
     
+            currentAccount.setAccountHolderName(currentRequestDTO.getAccountHolderName());
+            currentAccount.setPhoneNo(currentRequestDTO.getPhoneNo());
+            currentAccount.setEmailId(currentRequestDTO.getEmailId());
+            currentAccount.setAge(currentRequestDTO.getAge());
+            currentAccount.setGender(currentRequestDTO.getGender());
             currentAccount.setInterestRate(currentRequestDTO.getInterestRate());
             currentAccount.setBalance(currentRequestDTO.getBalance());
             currentAccount.setDateOfOpening(currentRequestDTO.getDateOfOpening());
@@ -146,15 +155,6 @@ public class AccountServiceImpl implements IAccountService {
 		}
 
 	}
-
-//	@Override
-//	public Account findAccountById(int account_id) throws InvalidAccountException {
-//		Account account = accountRepository.findById((long) account_id).get();
-//		if(account == null) {
-//			throw new InvalidAccountException("Account Not Found.","");
-//		}
-//		return account;
-//	}
 	
 	@Override
 	public Account findAccountById(long account_id) throws InvalidAccountException {
@@ -168,20 +168,26 @@ public class AccountServiceImpl implements IAccountService {
 	}
 
 	@Override
-	public List<Account> viewAccounts(long customerId) throws DetailsNotFoundException {
-		// TODO Auto-generated method stub
+	public List<Account> viewAccounts() {
+		List<Account> accounts = accountRepository.findAll();
+		return accounts;
+	}
+
+	@Override
+	public SavingsAccount viewSavingAcc(long accountId) throws DetailsNotFoundException {
+		Account account = accountRepository.findById(accountId).get();
+		if (account instanceof SavingsAccount) {
+			return (SavingsAccount) account;
+		}
 		return null;
 	}
 
 	@Override
-	public SavingsAccount viewSavingAcc(long customerId) throws DetailsNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public CurrentAccount viewCurrentAcc(long customerId) throws DetailsNotFoundException {
-		// TODO Auto-generated method stub
+	public CurrentAccount viewCurrentAcc(long accountId) throws DetailsNotFoundException {
+		Account account = accountRepository.findById(accountId).get();
+		if (account instanceof CurrentAccount) {
+			return (CurrentAccount) account;
+		}
 		return null;
 	}
 
@@ -228,7 +234,6 @@ public class AccountServiceImpl implements IAccountService {
 				addCurrentAccount(ca);
 				return ca;
 			}
-			
 			
 		}
 		return null;

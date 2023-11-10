@@ -2,23 +2,13 @@ package com.cg.iba.service;
 
 import java.time.LocalDate;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Function;
-
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.repository.query.FluentQuery.FetchableFluentQuery;
 import org.springframework.stereotype.Service;
 
 import com.cg.iba.entity.DebitCard;
 import com.cg.iba.repository.IDebitCardRepository;
-import com.cg.iba.util.DateConverter;
 
 @Service
 public class DebitCardServiceImpl implements IDebitCardService {
@@ -41,6 +31,9 @@ public class DebitCardServiceImpl implements IDebitCardService {
 		DebitCard savedDebitCard = debitCardRepository.findById(debitCardNumber).get();
 		return savedDebitCard;
 	}
+	
+//	@Override
+//	public DebitCard getDebitCardByAccountId()
 
 	@Override
 	@Transactional
@@ -67,23 +60,22 @@ public class DebitCardServiceImpl implements IDebitCardService {
 //		return null;
 //	}
 
+	@Override
+	public String checkExpiry(long debitCardNumber) {
+		DebitCard savedDebitCard = getDebitCardByDebitCardNumber(debitCardNumber);
+		if (savedDebitCard != null) {
+			LocalDate currentDate = LocalDate.now();
+			LocalDate expiryDate = savedDebitCard.getDebitCardExpiryDate();
 
-	  @Override
-	  public String checkExpiry(long debitCardNumber) {
-	        DebitCard savedDebitCard = getDebitCardByDebitCardNumber(debitCardNumber);
-	        if (savedDebitCard != null) {
-	            LocalDate currentDate = LocalDate.now();
-	            LocalDate expiryDate = savedDebitCard.getDebitCardExpiryDate();
-	            
-	          //  LocalDate expiryDate = DateConverter.getDateFromString(expiryDateString);
-	            
-	            if (expiryDate != null && currentDate.isAfter(expiryDate) ) {
-	                return "Debit Card is Expired";
-	            }
-	            return "Debit Card is Yet To Expired";
-	        }
-	        return "Debit Card Not Allocated";
-	    }
+			// LocalDate expiryDate = DateConverter.getDateFromString(expiryDateString);
+
+			if (expiryDate != null && currentDate.isAfter(expiryDate)) {
+				return "Debit Card is Expired";
+			}
+			return "Debit Card is Yet To Expired";
+		}
+		return "Debit Card Not Allocated";
+	}
 
 	@Override
 	public DebitCard requestNewCard(long debitCardNumber) {
@@ -94,6 +86,4 @@ public class DebitCardServiceImpl implements IDebitCardService {
 		return null;
 	}
 	  
-	  
-//	
 }

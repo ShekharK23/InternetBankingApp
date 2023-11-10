@@ -12,6 +12,11 @@ public class CurrentAccountRequestSubmitDTOConverter {
 	{
 		CurrentAccount a = new CurrentAccount();
 		
+		a.setAccountHolderName(dto.getAccountHolderName());
+		a.setPhoneNo(dto.getPhoneNo());
+		a.setEmailId(dto.getAccountHolderName());
+		a.setAge(dto.getAge());
+		a.setGender(dto.getGender());
 		a.setInterestRate(dto.getInterestRate());
 		a.setBalance(dto.getBalance());
 		a.setDateOfOpening(dto.getDateOfOpening());
