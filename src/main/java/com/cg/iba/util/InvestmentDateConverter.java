@@ -2,8 +2,7 @@ package com.cg.iba.util;
 
 import java.time.LocalDate;
 
-public class PolicyDateConverter {
-	
+public class InvestmentDateConverter {
 	public static LocalDate getDateFromString(String str) {
 
 		String arr[] = str.split("-");

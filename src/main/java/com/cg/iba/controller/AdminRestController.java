@@ -21,7 +21,9 @@ import com.cg.iba.dto.SavingAccountRequestSubmitDTO;
 import com.cg.iba.entity.Account;
 import com.cg.iba.entity.CurrentAccount;
 import com.cg.iba.entity.DebitCard;
+import com.cg.iba.entity.Investment;
 import com.cg.iba.entity.Nominee;
+import com.cg.iba.entity.Policy;
 import com.cg.iba.entity.SavingsAccount;
 import com.cg.iba.exception.DetailsNotFoundException;
 import com.cg.iba.exception.EmptyListException;
@@ -253,8 +255,44 @@ public class AdminRestController {
 	
 	@PutMapping("/nomineetoaccount")
 	public Account allocateNomineeToAccount(@RequestParam long nomineeId,@RequestParam long accNum) throws InvalidAccountException, InvalidDetailsException,DetailsNotFoundException {
-
 		Account updatedAccount = accountService.addNomineeToAccount(nomineeId, accNum);
 		return updatedAccount;
+	}
+	
+	/**
+	 * 		Method To Link Policies To Account
+	 */
+	@PutMapping("/policytoaccount") 	// working
+	public Account allocatePolicyToAccount(@RequestParam long policyId,@RequestParam long accNum) throws InvalidAccountException, InvalidDetailsException,DetailsNotFoundException {
+		Account updatedAccount = accountService.addPolicyToAccount(policyId, accNum);
+		return updatedAccount;
+	}
+	
+	
+	/**
+	 * 		Method To Fetch All Policies Related to Account 
+	 */
+	@GetMapping("/account/policy")		// working
+	public List<Policy> getPolicyByAccountId(@RequestParam long accNum) {
+		List<Policy> temp = accountService.getPolicyByAccountId(accNum);
+		return temp;
+	}
+	
+	/**
+	 * 		Method To Link Investment To Account
+	 */
+	@PutMapping("/investmenttoaccount") 	// working
+	public Account addInvestmentToAccount(@RequestParam long fdNumber, @RequestParam long accNum) throws InvalidAccountException, InvalidDetailsException{
+		Account updatedAccount = accountService.addInvestmentToAccount(fdNumber, accNum);
+		return updatedAccount;
+	}
+	
+	/**
+	 * 		Method To Fetch All Investments Related to Account 
+	 */
+	@GetMapping("/account/investment") 		// working
+	public List<Investment> getInvestmentByAccountId(@RequestParam long accNum){
+		List<Investment> temp = accountService.getInvestmentByAccountId(accNum);
+		return temp;
 	}
 }

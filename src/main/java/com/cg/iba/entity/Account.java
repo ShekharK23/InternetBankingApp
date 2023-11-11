@@ -57,8 +57,16 @@ public class Account {
     private LocalDate  dateOfOpening;
     
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn( name = "dependedId")
+    @JoinColumn(name = "dependedId")
     private List<Nominee> nominees;
+    
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "policyNumber1")
+    private List<Policy> policies;
+    
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "fdNumber1")
+    private List<Investment> investments;
     
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "beneficiaryID1")
