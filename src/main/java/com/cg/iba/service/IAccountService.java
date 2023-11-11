@@ -9,6 +9,8 @@ import com.cg.iba.dto.SavingAccountRequestSubmitDTO;
 import com.cg.iba.entity.Account;
 import com.cg.iba.entity.SavingsAccount;
 import com.cg.iba.entity.CurrentAccount;
+import com.cg.iba.entity.Investment;
+import com.cg.iba.entity.Policy;
 import com.cg.iba.entity.Transaction;
 import com.cg.iba.exception.DetailsNotFoundException;
 import com.cg.iba.exception.InvalidAccountException;
@@ -42,4 +44,10 @@ public interface IAccountService {
 
 	public Account addDebitCardToAccount(long accNum, long debitCardNum) throws InvalidAccountException;
 	public Account addNomineeToAccount(long nomineeId, long accNum) throws InvalidAccountException, DetailsNotFoundException,InvalidDetailsException;
+
+	public Account addPolicyToAccount(long policyId, long accNum) throws InvalidAccountException, InvalidDetailsException;
+	public List<Policy> getPolicyByAccountId(long accNum);
+	
+	public Account addInvestmentToAccount(long fdNumber, long accNum) throws InvalidAccountException, InvalidDetailsException;
+	public List<Investment> getInvestmentByAccountId(long accNum);
 }

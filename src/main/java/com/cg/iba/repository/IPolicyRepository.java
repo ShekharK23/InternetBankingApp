@@ -7,8 +7,7 @@ import org.springframework.stereotype.Repository;
 import com.cg.iba.entity.Account;
 import com.cg.iba.entity.Policy;
 
-
 @Repository
 public interface IPolicyRepository extends JpaRepository<Policy, Long>{
-	//public void deleteByAccount(Account account);
+	
 }
