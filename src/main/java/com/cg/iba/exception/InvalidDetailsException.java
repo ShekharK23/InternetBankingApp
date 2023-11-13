@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class InvalidDetailsException extends Exception {
 
+	
 	private String errorMsg;
 	private String  srcResName;
 	

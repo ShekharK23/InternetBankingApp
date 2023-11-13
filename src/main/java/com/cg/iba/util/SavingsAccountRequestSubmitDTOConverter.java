@@ -14,7 +14,7 @@ public class SavingsAccountRequestSubmitDTOConverter {
 		
 		a.setAccountHolderName(dto.getAccountHolderName());
 		a.setPhoneNo(dto.getPhoneNo());
-		a.setEmailId(dto.getAccountHolderName());
+		a.setEmailId(dto.getEmailId());
 		a.setAge(dto.getAge());
 		a.setGender(dto.getGender());
 		a.setInterestRate(dto.getInterestRate());

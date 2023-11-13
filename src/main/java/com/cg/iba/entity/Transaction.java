@@ -1,6 +1,7 @@
 package com.cg.iba.entity;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +10,9 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+
+import com.cg.iba.util.TransactionDateConverter;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,7 +32,8 @@ public class Transaction {
 	@Enumerated(EnumType.STRING)
 	@Column(name="transactionType")
     private TransactionType transactionType; 
-    private LocalDateTime dateTime;
+    private String date=TransactionDateConverter.convertLocalDateToString(LocalDate.now());
+    
     
 	@Enumerated(EnumType.STRING)
 	@Column(name="transactionStatus")

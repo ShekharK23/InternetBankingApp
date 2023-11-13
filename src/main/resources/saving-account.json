@@ -1,0 +1,31 @@
+{
+  "accountHolderName": "Shubham Manohar Bhaingade",
+  "age": 18,
+  "balance": 4000,
+  "dateOfOpening": "2023-08-23",
+  "emailId": "shubham@gmail.com",
+  "gender": "MALE",
+  "interestRate": 4.5,
+  "phoneNo": "9967175785",
+  "savingFine": 500,
+  "savingMinBalance": 5000,
+  
+  
+  "accountId": 1,
+  "accountHolderName": "Shubham Manohar Bhaingade",
+  "phoneNo": "9967175785",
+  "emailId": "shubham@gmail.com",
+  "age": 18,
+  "gender": "MALE",
+  "interestRate": 4.5,
+  "balance": 4000,
+  "dateOfOpening": "2023/08/23",
+  "nominees": [],
+  "beneficiaries": [],
+  "transactions": [],
+  "debitCard": null,
+  "savingMinBalance": 5000,
+  "savingFine": 500
+
+}
+

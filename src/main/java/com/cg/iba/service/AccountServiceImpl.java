@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.cg.iba.dto.CurrentAccountRequestSubmitDTO;
 import com.cg.iba.dto.SavingAccountRequestSubmitDTO;
+import com.cg.iba.dto.TransactionRequestDTO;
 import com.cg.iba.entity.Account;
 import com.cg.iba.entity.CurrentAccount;
 import com.cg.iba.entity.DebitCard;
@@ -21,6 +22,7 @@ import com.cg.iba.entity.Nominee;
 import com.cg.iba.entity.Policy;
 import com.cg.iba.entity.SavingsAccount;
 import com.cg.iba.entity.Transaction;
+import com.cg.iba.entity.TransactionType;
 import com.cg.iba.exception.DetailsNotFoundException;
 import com.cg.iba.exception.InvalidAccountException;
 import com.cg.iba.exception.InvalidAmountException;
@@ -30,6 +32,7 @@ import com.cg.iba.repository.IAccountRepository;
 import com.cg.iba.repository.IDebitCardRepository;
 import com.cg.iba.repository.IInvestmentRepository;
 import com.cg.iba.repository.INomineeRepository;
+import com.cg.iba.repository.ITransactionRepository;
 import com.cg.iba.repository.IPolicyRepository;
 
 @Service
@@ -48,7 +51,7 @@ public class AccountServiceImpl implements IAccountService {
 	INomineeService nomineeService;
 
 	@Autowired
-	IPolicyRepository policyRepository;
+	ITransactionRepository transactionRepository;
 
 	@Autowired
 	IInvestmentRepository investmentRepository;
@@ -62,14 +65,52 @@ public class AccountServiceImpl implements IAccountService {
 
 	@Override
 	public Transaction withdraw(long accounId, String username, String password) throws LowBalanceException {
-		// TODO Auto-generated method stub
+	
 		return null;
 	}
 
 	@Override
-	public Transaction deposit(long accounId, double amount) throws InvalidAccountException, InvalidAmountException {
-		// TODO Auto-generated method stub
-		return null;
+	@Transactional
+	public Transaction deposit(long accounId, double amount, Transaction t)
+			throws InvalidAccountException, InvalidAmountException, InvalidDetailsException {
+		Account existingAccount = accountRepository.findById(accounId)
+				.orElseThrow(() -> new InvalidAccountException(
+						"The Account Number " + accounId + "You've Intered is Not valid Account number",
+						AccountServiceImpl.class + ""));
+		if (existingAccount instanceof SavingsAccount) {
+			SavingsAccount sa = (SavingsAccount) existingAccount;
+			if (existingAccount.getBalance() < sa.getSavingMinBalance()) {
+				throw new InvalidAmountException("The Minimum Amount should be maintained",
+						AccountServiceImpl.class + "");
+			} else {
+				existingAccount.setBalance(existingAccount.getBalance() + amount);
+
+				t.setAmount(amount);
+				t.setTransactionType(TransactionType.CREDIT);
+				transactionRepository.save(t);
+
+				accountRepository.save(existingAccount);
+				
+				addTransactionToAccount(t.getTransactionId(), accounId);
+				return t;
+			}
+
+		} else if (existingAccount instanceof CurrentAccount) {
+			CurrentAccount currentAcc = (CurrentAccount) existingAccount;
+			if (existingAccount.getBalance() < currentAcc.getCurrentMinBalance()) {
+				throw new InvalidAmountException("The Minimum Amount should be maintained",
+						AccountServiceImpl.class + "");
+			} else {
+				existingAccount.setBalance(existingAccount.getBalance() + amount);
+				t.setAmount(amount);
+				t.setTransactionType(TransactionType.CREDIT);
+				transactionRepository.save(t);
+				accountRepository.save(existingAccount);
+				addTransactionToAccount(t.getTransactionId(), accounId);
+				return t;
+			}
+		}
+		return t;
 	}
 
 	@Override
@@ -119,7 +160,6 @@ public class AccountServiceImpl implements IAccountService {
 			throws InvalidDetailsException {
 		Account existingAccount = accountRepository.findById(accountId)
 				.orElseThrow(() -> new InvalidDetailsException("Account not found", ""));
-
 		if (existingAccount instanceof CurrentAccount) {
 			CurrentAccount currentAccount = (CurrentAccount) existingAccount;
 
@@ -150,23 +190,58 @@ public class AccountServiceImpl implements IAccountService {
 			new InvalidAccountException("Account not found", "");
 			return false;
 		} else {
-			accountRepository.deleteById(accountNo.getAccountId());
-			return true;
+			throw new InvalidDetailsException("Account is not a Savings Account", "");
 		}
-
 	}
 
 	@Override
+	@Transactional
+	public CurrentAccount updateCurrentAccount(long accountId, CurrentAccountRequestSubmitDTO currentRequestDTO)
+			throws InvalidDetailsException {
+		Account existingAccount = accountRepository.findById(accountId)
+				.orElseThrow(() -> new InvalidDetailsException("Account not found", ""));
+
+		if (existingAccount instanceof CurrentAccount) {
+			CurrentAccount currentAccount = (CurrentAccount) existingAccount;
+
+			currentAccount.setAccountHolderName(currentRequestDTO.getAccountHolderName());
+			currentAccount.setPhoneNo(currentRequestDTO.getPhoneNo());
+			currentAccount.setEmailId(currentRequestDTO.getEmailId());
+			currentAccount.setAge(currentRequestDTO.getAge());
+			currentAccount.setGender(currentRequestDTO.getGender());
+			currentAccount.setInterestRate(currentRequestDTO.getInterestRate());
+			currentAccount.setBalance(currentRequestDTO.getBalance());
+			currentAccount.setDateOfOpening(currentRequestDTO.getDateOfOpening());
+			currentAccount.setCurrentMinBalance(currentRequestDTO.getCurrentMinBalance());
+			currentAccount.setCurrentFine(currentRequestDTO.getCurrentFine());
+
+			CurrentAccount updatedAccount = accountRepository.save(currentAccount);
+
+			return updatedAccount;
+    }
 	public boolean closeCurrentAccount(CurrentAccount accountNo) throws InvalidAccountException {
 		Account existingAccount = accountRepository.findById(accountNo.getAccountId()).get();
 
 		if (existingAccount == null) {
 			new InvalidAccountException("Account not found", "");
 			return false;
+
 		} else {
-			accountRepository.deleteById(accountNo.getAccountId());
-			return true;
+			throw new InvalidDetailsException("Account is not a Savings Account", "");
 		}
+	}
+
+	@Override
+	public String closeSavingsAccount(long accountNo) throws InvalidAccountException {
+
+		accountRepository.deleteById(accountNo);
+		return "Savings account No_" + accountNo + "  is Deleted";
+	}
+
+	@Override
+	public String closeCurrentAccount(long accountNo) throws InvalidAccountException {
+		accountRepository.deleteById(accountNo);
+		return "Current account No_" + accountNo + "  is Deleted";
 
 	}
 
@@ -252,6 +327,15 @@ public class AccountServiceImpl implements IAccountService {
 
 	@Override
 	@Transactional
+	public Account addTransactionToAccount(long transactionId, long accNum)
+			throws InvalidAccountException, InvalidDetailsException {
+		Account savedAcc = findAccountById(accNum);
+		Transaction transaction = transactionRepository.findById(transactionId).get();
+		if (savedAcc != null && transaction != null) {
+			List<Transaction> allTransactions = savedAcc.getTransactions();
+			allTransactions.add(transaction);
+			savedAcc.setTransactions(allTransactions);
+
 	public Account addPolicyToAccount(long policyId, long accNum)
 			throws InvalidAccountException, InvalidDetailsException {
 		Account savedAcc = findAccountById(accNum);

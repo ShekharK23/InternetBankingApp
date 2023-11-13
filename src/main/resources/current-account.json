@@ -1,0 +1,12 @@
+{
+  "accountHolderName": "Chaitanya Kapse",
+  "age": 23,
+  "balance": 5000,
+  "currentFine": 2000,
+  "currentMinBalance": 10000,
+  "dateOfOpening": "2023-11-12",
+  "emailId": "cg@gmail.com",
+  "gender": "MALE",
+  "interestRate": 4.5,
+  "phoneNo": "778876678999990"
+}

@@ -17,7 +17,7 @@ import com.cg.iba.exception.InvalidDetailsException;
 public interface INomineeService {
 
 	public Nominee addNominee(Nominee nominee) throws InvalidDetailsException;
-	public Nominee updateNominee(Nominee nominee) throws InvalidDetailsException, DetailsNotFoundException;
+	public Nominee updateNominee(long id,NomineeRequestSubmitDTO nominee) throws InvalidDetailsException, DetailsNotFoundException;
 	public boolean deleteNominee(long nomineeId) throws DetailsNotFoundException ;
 	public Nominee findNomineeById(long nomineeId)throws DetailsNotFoundException ;
 	public List<Nominee> listAllNominees(long accountid) throws InvalidAccountException, EmptyListException ;
