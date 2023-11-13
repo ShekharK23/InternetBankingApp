@@ -1,12 +1,11 @@
 package com.cg.iba.dto;
 
-import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
 import org.springframework.stereotype.Component;
 
-import com.cg.iba.entity.Relation;
+import com.cg.iba.entity.enums.Relation;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

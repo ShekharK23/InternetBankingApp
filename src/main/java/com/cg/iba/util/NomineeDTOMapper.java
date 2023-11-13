@@ -6,7 +6,7 @@ import com.cg.iba.dto.NomineeRequestSubmitDTO;
 import com.cg.iba.entity.Nominee;
 
 @Component
-public class NomineeRequestSubmitDTOMapper {
+public class NomineeDTOMapper {
 
 	public Nominee setNomineeUsingDTO(NomineeRequestSubmitDTO dto)
 	{

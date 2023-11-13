@@ -14,9 +14,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountResponseDTO {
+public class AccountRequestSubmitDTO {
 
-	private long accountId;
 	private String accountHolderName;
 	private String phoneNo;
 	private String emailId;
@@ -25,5 +24,5 @@ public class AccountResponseDTO {
 	private double interestRate;
 	private double balance;
 	private LocalDate dateOfOpening;
-
+	
 }

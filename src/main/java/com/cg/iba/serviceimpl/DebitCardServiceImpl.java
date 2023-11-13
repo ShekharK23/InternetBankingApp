@@ -1,4 +1,4 @@
-package com.cg.iba.service;
+package com.cg.iba.serviceimpl;
 
 import java.time.LocalDate;
 
@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.cg.iba.entity.DebitCard;
 import com.cg.iba.repository.IDebitCardRepository;
+import com.cg.iba.service.IDebitCardService;
 
 @Service
 public class DebitCardServiceImpl implements IDebitCardService {
@@ -18,6 +19,7 @@ public class DebitCardServiceImpl implements IDebitCardService {
 
 	@Override
 	public long saveDebitCardDetails(DebitCard debitCard) {
+		debitCard.setDebitCardExpiryDate(LocalDate.now());
 		DebitCard savedDebitCard = debitCardRepository.save(debitCard);
 		if(savedDebitCard != null) {
 			long newDebitCardNumber = savedDebitCard.getDebitCardNumber();
@@ -31,9 +33,6 @@ public class DebitCardServiceImpl implements IDebitCardService {
 		DebitCard savedDebitCard = debitCardRepository.findById(debitCardNumber).get();
 		return savedDebitCard;
 	}
-	
-//	@Override
-//	public DebitCard getDebitCardByAccountId()
 
 	@Override
 	@Transactional

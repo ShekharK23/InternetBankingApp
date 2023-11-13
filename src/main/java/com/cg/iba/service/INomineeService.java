@@ -1,12 +1,9 @@
 package com.cg.iba.service;
 
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
-import com.cg.iba.dto.NomineeRequestSubmitDTO;
-import com.cg.iba.entity.Account;
 import com.cg.iba.entity.Nominee;
 import com.cg.iba.exception.DetailsNotFoundException;
 import com.cg.iba.exception.EmptyListException;

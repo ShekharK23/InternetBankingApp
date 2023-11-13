@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 import org.springframework.stereotype.Component;
 
-import com.cg.iba.entity.Gender;
+import com.cg.iba.entity.enums.Gender;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,4 +28,5 @@ public class CurrentAccountResponseDTO {
 
 	private double currentMinBalance;
 	private double currentFine;
+	
 }

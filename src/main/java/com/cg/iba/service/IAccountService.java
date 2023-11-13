@@ -42,4 +42,7 @@ public interface IAccountService {
 
 	public Account addDebitCardToAccount(long accNum, long debitCardNum) throws InvalidAccountException;
 	public Account addNomineeToAccount(long nomineeId, long accNum) throws InvalidAccountException, DetailsNotFoundException,InvalidDetailsException;
+	public Account addPolicyToAccount(long policyId, long accNum) throws InvalidAccountException, InvalidDetailsException;
+	public Account addBeneficiaryToAccount(long beneficiaryId, long accNum) throws InvalidAccountException, InvalidDetailsException;
+	public Account addTransactionToAccount(long transactionId, long accNum) throws InvalidAccountException, InvalidDetailsException;
 }

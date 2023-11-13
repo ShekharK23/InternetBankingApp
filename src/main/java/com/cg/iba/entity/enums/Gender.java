@@ -1,4 +1,4 @@
-package com.cg.iba.entity;
+package com.cg.iba.entity.enums;
 
 public enum Gender {
 

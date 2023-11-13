@@ -19,6 +19,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.cg.iba.entity.enums.Gender;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import io.swagger.annotations.ApiModel;
@@ -34,7 +35,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @ApiModel(description = "Details about Account Bean")
-public class Account {
+public class Account{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -67,6 +68,10 @@ public class Account {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "transactionID1")
     private List<Transaction> transactions;
+    
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "policyID1")
+    private List<Policy> policies;
     
     @OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "debitCardNumber1")

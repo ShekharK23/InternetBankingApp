@@ -1,14 +1,10 @@
-package com.cg.iba.service;
+package com.cg.iba.serviceimpl;
 
 import java.util.List;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.stereotype.Service;
 
-import com.cg.iba.dto.NomineeRequestSubmitDTO;
 import com.cg.iba.entity.Account;
 import com.cg.iba.entity.Nominee;
 import com.cg.iba.exception.DetailsNotFoundException;
@@ -17,6 +13,7 @@ import com.cg.iba.exception.InvalidAccountException;
 import com.cg.iba.exception.InvalidDetailsException;
 import com.cg.iba.repository.IAccountRepository;
 import com.cg.iba.repository.INomineeRepository;
+import com.cg.iba.service.INomineeService;
 
 @Service
 public class NomineeServiceImpl implements INomineeService {

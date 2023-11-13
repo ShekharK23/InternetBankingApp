@@ -1,7 +1,6 @@
-package com.cg.iba.util;
+package com.cg.iba.util.date;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 public class DateConverter {
 	

@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 import org.springframework.stereotype.Component;
 
-import com.cg.iba.entity.Gender;
+import com.cg.iba.entity.enums.Gender;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,7 +16,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SavingAccountRequestSubmitDTO {
 	
-	private long accountId;
 	private String accountHolderName;
     private String phoneNo;
     private String emailId;

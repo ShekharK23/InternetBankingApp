@@ -1,4 +1,4 @@
-package com.cg.iba.util;
+package com.cg.iba.util.date;
 
 import java.time.LocalDate;
 

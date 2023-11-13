@@ -1,6 +1,6 @@
-package com.cg.iba.service;
+package com.cg.iba.serviceimpl;
 
-import java.time.LocalDate;		
+import java.time.LocalDate;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +14,7 @@ import com.cg.iba.entity.Account;
 import com.cg.iba.entity.Policy;
 import com.cg.iba.repository.IAccountRepository;
 import com.cg.iba.repository.IPolicyRepository;
+import com.cg.iba.service.IPolicyService;
 
 @Service
 public class PolicyServiceImpl implements IPolicyService {
@@ -59,7 +60,7 @@ public class PolicyServiceImpl implements IPolicyService {
 	public String checkExpiryDate(long policyNumber) {
 		Policy savedPolicy = getPolicyByPolicyNumber(policyNumber);
 		if(savedPolicy!=null) {
-			LocalDate currentDate = LocalDate.now();
+//			LocalDate currentDate = LocalDate.now();
 			//LocalDate expiryDate = PolicyDateConverter.getDateFromString(savedPolicy.getPolicyExpiryDate());
 			
 //			if(currentDate.isAfter(expiryDate)) {
