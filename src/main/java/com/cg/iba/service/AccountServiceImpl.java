@@ -1,5 +1,7 @@
 package com.cg.iba.service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import java.util.Optional;
@@ -15,7 +17,9 @@ import com.cg.iba.dto.TransactionRequestDTO;
 import com.cg.iba.entity.Account;
 import com.cg.iba.entity.CurrentAccount;
 import com.cg.iba.entity.DebitCard;
+import com.cg.iba.entity.Investment;
 import com.cg.iba.entity.Nominee;
+import com.cg.iba.entity.Policy;
 import com.cg.iba.entity.SavingsAccount;
 import com.cg.iba.entity.Transaction;
 import com.cg.iba.entity.TransactionType;
@@ -26,8 +30,10 @@ import com.cg.iba.exception.InvalidDetailsException;
 import com.cg.iba.exception.LowBalanceException;
 import com.cg.iba.repository.IAccountRepository;
 import com.cg.iba.repository.IDebitCardRepository;
+import com.cg.iba.repository.IInvestmentRepository;
 import com.cg.iba.repository.INomineeRepository;
 import com.cg.iba.repository.ITransactionRepository;
+import com.cg.iba.repository.IPolicyRepository;
 
 @Service
 public class AccountServiceImpl implements IAccountService {
@@ -46,6 +52,9 @@ public class AccountServiceImpl implements IAccountService {
 
 	@Autowired
 	ITransactionRepository transactionRepository;
+
+	@Autowired
+	IInvestmentRepository investmentRepository;
 
 	@Override
 	public Transaction transferMoney(long senderAccounId, long receiverAccountId, double amount, String username,
@@ -151,6 +160,46 @@ public class AccountServiceImpl implements IAccountService {
 			throws InvalidDetailsException {
 		Account existingAccount = accountRepository.findById(accountId)
 				.orElseThrow(() -> new InvalidDetailsException("Account not found", ""));
+		if (existingAccount instanceof CurrentAccount) {
+			CurrentAccount currentAccount = (CurrentAccount) existingAccount;
+
+			currentAccount.setAccountHolderName(currentRequestDTO.getAccountHolderName());
+			currentAccount.setPhoneNo(currentRequestDTO.getPhoneNo());
+			currentAccount.setEmailId(currentRequestDTO.getEmailId());
+			currentAccount.setAge(currentRequestDTO.getAge());
+			currentAccount.setGender(currentRequestDTO.getGender());
+			currentAccount.setInterestRate(currentRequestDTO.getInterestRate());
+			currentAccount.setBalance(currentRequestDTO.getBalance());
+			currentAccount.setDateOfOpening(currentRequestDTO.getDateOfOpening());
+			currentAccount.setCurrentMinBalance(currentRequestDTO.getCurrentMinBalance());
+			currentAccount.setCurrentFine(currentRequestDTO.getCurrentFine());
+
+			CurrentAccount updatedAccount = accountRepository.save(currentAccount);
+
+			return updatedAccount;
+		} else {
+			throw new InvalidDetailsException("Account is not a Savings Account", "");
+		}
+	}
+
+	@Override
+	public boolean closeSavingsAccount(SavingsAccount accountNo) throws InvalidAccountException {
+		Account existingAccount = accountRepository.findById(accountNo.getAccountId()).get();
+
+		if (existingAccount == null) {
+			new InvalidAccountException("Account not found", "");
+			return false;
+		} else {
+			throw new InvalidDetailsException("Account is not a Savings Account", "");
+		}
+	}
+
+	@Override
+	@Transactional
+	public CurrentAccount updateCurrentAccount(long accountId, CurrentAccountRequestSubmitDTO currentRequestDTO)
+			throws InvalidDetailsException {
+		Account existingAccount = accountRepository.findById(accountId)
+				.orElseThrow(() -> new InvalidDetailsException("Account not found", ""));
 
 		if (existingAccount instanceof CurrentAccount) {
 			CurrentAccount currentAccount = (CurrentAccount) existingAccount;
@@ -169,6 +218,14 @@ public class AccountServiceImpl implements IAccountService {
 			CurrentAccount updatedAccount = accountRepository.save(currentAccount);
 
 			return updatedAccount;
+    }
+	public boolean closeCurrentAccount(CurrentAccount accountNo) throws InvalidAccountException {
+		Account existingAccount = accountRepository.findById(accountNo.getAccountId()).get();
+
+		if (existingAccount == null) {
+			new InvalidAccountException("Account not found", "");
+			return false;
+
 		} else {
 			throw new InvalidDetailsException("Account is not a Savings Account", "");
 		}
@@ -278,11 +335,23 @@ public class AccountServiceImpl implements IAccountService {
 			List<Transaction> allTransactions = savedAcc.getTransactions();
 			allTransactions.add(transaction);
 			savedAcc.setTransactions(allTransactions);
+
+	public Account addPolicyToAccount(long policyId, long accNum)
+			throws InvalidAccountException, InvalidDetailsException {
+		Account savedAcc = findAccountById(accNum);
+		Policy policy = policyRepository.findById(policyId).get();
+
+		if (savedAcc != null && policy != null) {
+			List<Policy> allPolicy = savedAcc.getPolicies();
+			allPolicy.add(policy);
+			savedAcc.setPolicies(allPolicy);
+
 			if (savedAcc instanceof SavingsAccount) {
 				SavingsAccount sa = (SavingsAccount) savedAcc;
 				addSavingsAccount(sa);
 				return sa;
 			}
+
 			if (savedAcc instanceof CurrentAccount) {
 				CurrentAccount ca = (CurrentAccount) savedAcc;
 				addCurrentAccount(ca);
@@ -292,4 +361,51 @@ public class AccountServiceImpl implements IAccountService {
 		return null;
 	}
 
+	@Override
+	public List<Policy> getPolicyByAccountId(long accNum) {
+		Account account = accountRepository.findById(accNum).get();
+
+		if (account != null) {
+			return account.getPolicies();
+		}
+		return Collections.emptyList();
+	}
+
+	@Override
+	@Transactional
+	public Account addInvestmentToAccount(long fdNumber, long accNum)
+			throws InvalidAccountException, InvalidDetailsException {
+		Account savedAcc = findAccountById(accNum);
+		Investment investment = investmentRepository.findById(fdNumber).get();
+
+		if (savedAcc != null & investment != null) {
+			List<Investment> allInvestments = savedAcc.getInvestments();
+			allInvestments.add(investment);
+			savedAcc.setInvestments(allInvestments);
+
+			if (savedAcc instanceof SavingsAccount) {
+				SavingsAccount sa = (SavingsAccount) savedAcc;
+				addSavingsAccount(sa);
+				return sa;
+			}
+
+			if (savedAcc instanceof CurrentAccount) {
+				CurrentAccount ca = (CurrentAccount) savedAcc;
+				addCurrentAccount(ca);
+				return ca;
+			}
+		}
+
+		return null;
+	}
+
+	@Override
+	public List<Investment> getInvestmentByAccountId(long accNum) {
+		Account account = accountRepository.findById(accNum).get();
+
+		if (account != null) {
+			return account.getInvestments();
+		}
+		return Collections.emptyList();
+	}
 }

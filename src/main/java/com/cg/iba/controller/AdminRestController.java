@@ -24,7 +24,9 @@ import com.cg.iba.dto.TransactionRequestDTO;
 import com.cg.iba.entity.Account;
 import com.cg.iba.entity.CurrentAccount;
 import com.cg.iba.entity.DebitCard;
+import com.cg.iba.entity.Investment;
 import com.cg.iba.entity.Nominee;
+import com.cg.iba.entity.Policy;
 import com.cg.iba.entity.SavingsAccount;
 import com.cg.iba.entity.Transaction;
 import com.cg.iba.exception.DetailsNotFoundException;
@@ -236,56 +238,10 @@ public class AdminRestController {
 	
 	@PutMapping("/allocateNomineeToAccount")//Working
 	public Account allocateNomineeToAccount(@RequestParam long nomineeId,@RequestParam long accNum) throws InvalidAccountException, InvalidDetailsException,DetailsNotFoundException {
-
 		Account updatedAccount = accountService.addNomineeToAccount(nomineeId, accNum);
 		return updatedAccount;
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-//	
-//	@PutMapping("/updateNomineeDetails") // working
-//	public ResponseEntity<NomineeResponseDTO> updateNominee(@RequestParam long id, @RequestBody NomineeRequestSubmitDTO nominee)
-//			throws InvalidDetailsException, DetailsNotFoundException {
-//		Nominee updatedNominee = nomineeService.updateNominee(id, nominee);
-//		NomineeResponseDTO n=nomineeDTOMapper.getNomineeUsingDTO(updatedNominee);
-//		
-//		return new ResponseEntity<NomineeResponseDTO>(n, HttpStatus.FOUND);
-//	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	@PutMapping("/deposit")
-	public ResponseEntity<Transaction>  deposit(@RequestParam long accounId,@RequestParam double amount,@RequestBody Transaction transaction) throws InvalidAccountException, InvalidAmountException, InvalidDetailsException {
-		Transaction saved=accountService.deposit(accounId, amount, transaction);
-		return new ResponseEntity<Transaction>(saved, HttpStatus.OK);
 	}
 }

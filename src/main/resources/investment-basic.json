@@ -1,0 +1,8 @@
+{
+    "fdNumber": 12,
+    "fdAmount": 5000,
+    "fdInterestRate": 7.5,
+    "fdTermMonths": 12,
+    "fdStartDate": "2023-10-11",
+    "fdMaturityDate": "2024-05-08"
+}

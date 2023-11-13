@@ -1,5 +1,6 @@
 package com.cg.iba.repository;
 
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.cg.iba.entity.Account;
 import com.cg.iba.entity.SavingsAccount;
 import com.cg.iba.entity.CurrentAccount;
+import com.cg.iba.entity.Policy;
 import com.cg.iba.entity.Transaction;
 import com.cg.iba.exception.DetailsNotFoundException;
 import com.cg.iba.exception.InvalidAccountException;
@@ -39,4 +41,5 @@ public interface IAccountRepository extends JpaRepository<Account, Long>{
 //	
 //	public SavingsAccount viewSavingAcc(long customerId) throws DetailsNotFoundException ;
 //	public CurrentAccount viewTermAcc(long customerId) throws DetailsNotFoundException;
+	
 }
