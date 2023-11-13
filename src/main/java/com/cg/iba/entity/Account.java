@@ -65,7 +65,7 @@ public class Account {
     private List<Beneficiary> beneficiaries;
     
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "transactionID1")
+    @JoinColumn(name = "transactionAccountID1")
     private List<Transaction> transactions;
     
     @OneToOne(cascade = CascadeType.ALL)

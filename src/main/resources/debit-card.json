@@ -1,0 +1,6 @@
+{
+  "debitCardExpiryDate": "2023-04-26",
+  "debitCardLimit": 60000,
+  "debitCardPin": 6789,
+  "debitCardStatus": "Active"
+}

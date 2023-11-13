@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SavingAccountRequestSubmitDTO {
 	
-	private long accountId;
+	
 	private String accountHolderName;
     private String phoneNo;
     private String emailId;

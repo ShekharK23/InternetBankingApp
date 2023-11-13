@@ -1,5 +1,6 @@
 package com.cg.iba.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,22 +18,27 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cg.iba.dto.CurrentAccountRequestSubmitDTO;
 import com.cg.iba.dto.NomineeRequestSubmitDTO;
+import com.cg.iba.dto.NomineeResponseDTO;
 import com.cg.iba.dto.SavingAccountRequestSubmitDTO;
+import com.cg.iba.dto.TransactionRequestDTO;
 import com.cg.iba.entity.Account;
 import com.cg.iba.entity.CurrentAccount;
 import com.cg.iba.entity.DebitCard;
 import com.cg.iba.entity.Nominee;
 import com.cg.iba.entity.SavingsAccount;
+import com.cg.iba.entity.Transaction;
 import com.cg.iba.exception.DetailsNotFoundException;
 import com.cg.iba.exception.EmptyListException;
 import com.cg.iba.exception.InvalidAccountException;
+import com.cg.iba.exception.InvalidAmountException;
 import com.cg.iba.exception.InvalidDetailsException;
 import com.cg.iba.service.IAccountService;
 import com.cg.iba.service.IDebitCardService;
 import com.cg.iba.service.INomineeService;
 import com.cg.iba.util.CurrentAccountRequestSubmitDTOConverter;
-import com.cg.iba.util.NomineeRequestSubmitDTOMapper;
+import com.cg.iba.util.NomineeDTOMapper;
 import com.cg.iba.util.SavingsAccountRequestSubmitDTOConverter;
+import com.cg.iba.util.TransactionDTOMapper;
 
 @RestController
 @RequestMapping("/admin")
@@ -44,8 +50,7 @@ public class AdminRestController {
 	@Autowired
 	IDebitCardService debitCardService;
 	
-	@Autowired
-	INomineeService nomineeService;
+	
 	
 	@Autowired
 	SavingsAccountRequestSubmitDTOConverter savAccReqSubDTO;
@@ -54,9 +59,11 @@ public class AdminRestController {
 	CurrentAccountRequestSubmitDTOConverter curAccReqSubDTO;
 	
 	@Autowired
-	NomineeRequestSubmitDTOMapper nomineeReqSubDTO;
+	TransactionDTOMapper transactionDTOMapper;
 	
-	@PostMapping("/register/newsavingsdto") // to be checked
+	
+	
+	@PostMapping("/register/newsavingsdto") // working
 	public SavingsAccount saveSavingsAccountDto(@RequestBody SavingAccountRequestSubmitDTO dto) throws InvalidDetailsException
 	{
 		SavingsAccount a = savAccReqSubDTO.setSavingAccountUsingDTO(dto);
@@ -64,7 +71,7 @@ public class AdminRestController {
 		return sav;
 	}
 	
-	@PostMapping("/register/newcurrentdto") // to be checked
+	@PostMapping("/register/newcurrentdto") // working
 	public CurrentAccount saveCurrentAcoountDto(@RequestBody CurrentAccountRequestSubmitDTO dto) throws InvalidDetailsException
 	{
 		CurrentAccount a = curAccReqSubDTO.setCurrentAccountUsingDTO(dto);
@@ -72,7 +79,7 @@ public class AdminRestController {
 		return cur;
 	}
 	
-    @PutMapping("/savings/{accountId}") // to be checked
+    @PutMapping("/updateSavingsAccount/{accountId}") // working
     public ResponseEntity<SavingsAccount> updateSavingsAccount(
             @PathVariable long accountId,
             @RequestBody SavingAccountRequestSubmitDTO savingRequestDTO
@@ -85,7 +92,7 @@ public class AdminRestController {
         }
     }
     
-    @PutMapping("/current/{accountId}") // to be checked
+    @PutMapping("/updateCurrentAccount/{accountId}") // working
     public ResponseEntity<CurrentAccount> updateCurrentAccount(
             @PathVariable long accountId,
             @RequestBody CurrentAccountRequestSubmitDTO currentRequestDTO
@@ -98,33 +105,32 @@ public class AdminRestController {
         }
     }
     
-    @DeleteMapping("/saving/delete")
-    public String deleteSavingAccount(@RequestBody SavingsAccount savingAccount) {
+    @DeleteMapping("/deleteSavingAccount")
+    public String deleteSavingAccount(@RequestParam long accountNo) {
     	try {
-    		boolean status = accountService.closeSavingsAccount(savingAccount);
-    		if(status) {
-    			return "Saving account - "+savingAccount.getAccountId()+" is Closed.";
+    		String status = accountService.closeSavingsAccount(accountNo);
+    		return status;
     		}
-		} catch (InvalidAccountException e) {
+    		catch (InvalidAccountException e) {
 			System.out.println(e);
 		}
     	return "Saving Account Not Closed.";
     }
     
-    @DeleteMapping("/current/delete")
-    public String deleteCurrentAccount(@RequestBody CurrentAccount currentAccount) {
-    	try {
-    		boolean status = accountService.closeCurrentAccount(currentAccount);
-    		if(status) {
-    			return "Current account - "+currentAccount.getAccountId()+" is Closed.";
-    		}
-		} catch (InvalidAccountException e) {
-			System.out.println(e);
-		}
-    	return "Current Account Not Closed.";
-    }
+//    @DeleteMapping("/deleteCurrentAccount")
+//    public String deleteCurrentAccount(@RequestBody CurrentAccount currentAccount) {
+//    	try {
+//    		boolean status = accountService.closeCurrentAccount(currentAccount);
+//    		if(status) {
+//    			return "Current account - "+currentAccount.getAccountId()+" is Closed.";
+//    		}
+//		} catch (InvalidAccountException e) {
+//			System.out.println(e);
+//		}
+//    	return "Current Account Not Closed.";
+//    }
     
-	@GetMapping("/getaccount") // to be checked
+	@GetMapping("/getAccountById1") // working
 	public ResponseEntity<Account> getAccountById1(@RequestParam long accountId)
 	{
 		try {
@@ -137,14 +143,14 @@ public class AdminRestController {
 
 	}
 	
-	@GetMapping("/getallaccounts") // to be check
+	@GetMapping("/getallaccounts") // working
 	public ResponseEntity<List<Account>> getAllAccounts()
 	{
 		List<Account> accounts = accountService.viewAccounts();
 		return new ResponseEntity<List<Account>>(accounts, HttpStatus.OK);
 	}
 	
-	@GetMapping("/getsavingaccount") // to be check
+	@GetMapping("/getSavingAccountById") // working
 	public ResponseEntity<SavingsAccount> getSavingAccountById(@RequestParam long accountId) throws DetailsNotFoundException
 	{
 		try {
@@ -157,7 +163,7 @@ public class AdminRestController {
 
 	}
 	
-	@GetMapping("/getcurrentaccount") // to be check
+	@GetMapping("/getCurrentAccountById") // working
 	public ResponseEntity<CurrentAccount> getCurrentAccountById(@RequestParam long accountId) throws DetailsNotFoundException
 	{
 		try {
@@ -170,7 +176,7 @@ public class AdminRestController {
 
 	}
 	
-	@PutMapping("/debitcardtoacc")
+	@PutMapping("/allocateDebitCardToAccount")//working
 	public Account allocateDebitCardToAccount(@RequestParam long accNum,@RequestParam long debitCardNum) throws InvalidAccountException {
 //		try {
 //			Account updatedAcc = accountService.addDebitCardToAccount(accNum, debitCardNum);
@@ -184,39 +190,34 @@ public class AdminRestController {
 	}
 	
 	// Debit cards functionality
-    @PostMapping("/createdebitcard")
+    @PostMapping("/createDebitCard")//working
     public long createDebitCard(@RequestBody DebitCard debitCard) {
         return debitCardService.saveDebitCardDetails(debitCard);
     }
 
-    @GetMapping("/{debitCardNumber}")
+    @GetMapping("getDebitCard/{debitCardNumber}")//working
     public DebitCard getDebitCard(@PathVariable long debitCardNumber) {
         return debitCardService.getDebitCardByDebitCardNumber(debitCardNumber);
     }
 
-    @PutMapping("/{debitCardNumber}/change-pin")
+    @PutMapping("changePin/{debitCardNumber}/change-pin")//working
     public DebitCard changePin(@PathVariable long debitCardNumber, @RequestParam int newPin) {
         return debitCardService.changePin(debitCardNumber, newPin);
     }
 
-    @GetMapping("/{debitCardNumber}/check-expiry")
+    @GetMapping("checkExpiry/{debitCardNumber}/check-expiry")//logic is not correct
     public String checkExpiry(@PathVariable long debitCardNumber) {
         return debitCardService.checkExpiry(debitCardNumber);
     }
 
-    @PutMapping("/{debitCardNumber}/request-new-card")
+    @PutMapping("/{debitCardNumber}/request-new-card")//not done yet..
     public DebitCard requestNewCard(@PathVariable long debitCardNumber) {
         return debitCardService.requestNewCard(debitCardNumber);
     }
     
     //Nominee Services
  
-	@PostMapping("/addNominee")
-	public Nominee addNominee(@RequestBody NomineeRequestSubmitDTO nominee) throws InvalidDetailsException {
-		Nominee n = nomineeReqSubDTO.setNomineeUsingDTO(nominee);
-		Nominee savedNominee = nomineeService.addNominee(n);
-		return savedNominee;
-	}
+	
 	
 //	@PostMapping("/registernewdto") // working
 //	public long saveAccountdto(@RequestBody AccountAddDTO dto)
@@ -226,35 +227,65 @@ public class AdminRestController {
 //		return newId;
 //	}
  
-	@GetMapping("/listAllNominee")
-	public ResponseEntity<List<Nominee>> listAllNominees(@RequestParam long accountId) throws InvalidAccountException, EmptyListException {
-		List<Nominee> allNominee = nomineeService.listAllNominees(accountId);
-		return new ResponseEntity<List<Nominee>>(allNominee, HttpStatus.CREATED);
-	}
+	
  
-	@GetMapping("/findNomineeById")
-	public ResponseEntity<Nominee> findNomineeById(@RequestParam long nomineeId) throws DetailsNotFoundException {
- 
-		Nominee savedNominee = nomineeService.findNomineeById(nomineeId);
-		return new ResponseEntity<Nominee>(savedNominee, HttpStatus.FOUND);
-	}
 	
-	@DeleteMapping("/deleteNomineeById/{nomineeId}")
-	public String deleteNomineeById(@PathVariable long nomineeId) throws DetailsNotFoundException {
-		nomineeService.deleteNominee(nomineeId);
-		return "The Nomineee is deleted for the id-:"+nomineeId;
-	}
 	
-	@PutMapping("/updateNomineeDetails")
-		public ResponseEntity<Nominee> updateNominee(@RequestBody Nominee nominee) throws InvalidDetailsException, DetailsNotFoundException {
-		Nominee updatedNominee=nomineeService.updateNominee(nominee);
-		return new ResponseEntity<Nominee>(updatedNominee, HttpStatus.CREATED);
-	}
 	
-	@PutMapping("/nomineetoaccount")
+	
+	
+	@PutMapping("/allocateNomineeToAccount")//Working
 	public Account allocateNomineeToAccount(@RequestParam long nomineeId,@RequestParam long accNum) throws InvalidAccountException, InvalidDetailsException,DetailsNotFoundException {
 
 		Account updatedAccount = accountService.addNomineeToAccount(nomineeId, accNum);
 		return updatedAccount;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+//	
+//	@PutMapping("/updateNomineeDetails") // working
+//	public ResponseEntity<NomineeResponseDTO> updateNominee(@RequestParam long id, @RequestBody NomineeRequestSubmitDTO nominee)
+//			throws InvalidDetailsException, DetailsNotFoundException {
+//		Nominee updatedNominee = nomineeService.updateNominee(id, nominee);
+//		NomineeResponseDTO n=nomineeDTOMapper.getNomineeUsingDTO(updatedNominee);
+//		
+//		return new ResponseEntity<NomineeResponseDTO>(n, HttpStatus.FOUND);
+//	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	@PutMapping("/deposit")
+	public ResponseEntity<Transaction>  deposit(@RequestParam long accounId,@RequestParam double amount,@RequestBody Transaction transaction) throws InvalidAccountException, InvalidAmountException, InvalidDetailsException {
+		Transaction saved=accountService.deposit(accounId, amount, transaction);
+		return new ResponseEntity<Transaction>(saved, HttpStatus.OK);
 	}
 }
